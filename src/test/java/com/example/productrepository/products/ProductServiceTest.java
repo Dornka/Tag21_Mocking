@@ -56,13 +56,13 @@ class ProductServiceTest {
     @Test
     void findById() {
         //GIVEN
-        Product p1 = new Product("1", "product1", 30);
+        String id = "1";
         Product savedProduct = new Product("1", "product1", 30);
 
-        when(productRepository.findById(savedProduct.id())).thenReturn();
+        when(productRepository.findById(id)).thenReturn(Optional.of(savedProduct));
 
         //WHEN
-        Product actual = productService.findById(p1.id());
+        Product actual = productService.findById(id);
 
         //THEN
         Product expected = new Product("1", "product1", 30);

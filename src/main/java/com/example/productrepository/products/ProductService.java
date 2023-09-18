@@ -1,5 +1,6 @@
 package com.example.productrepository.products;
 
+import com.example.productrepository.products.models.IdService;
 import com.example.productrepository.products.models.NewProduct;
 import com.example.productrepository.products.models.Product;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private IdService idService;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
