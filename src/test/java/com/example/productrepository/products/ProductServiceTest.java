@@ -1,8 +1,8 @@
 package com.example.productrepository.products;
 
+import com.example.productrepository.products.models.IdService;
 import com.example.productrepository.products.models.NewProduct;
 import com.example.productrepository.products.models.Product;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,7 +14,8 @@ import static org.mockito.Mockito.*;
 class ProductServiceTest {
 
     ProductRepository productRepository = mock(ProductRepository.class);
-    ProductService productService = new ProductService(productRepository);
+    IdService idService = mock(IdService.class);
+    ProductService productService = new ProductService(productRepository, idService);
 
 
     @Test
@@ -42,6 +43,7 @@ class ProductServiceTest {
         NewProduct newProduct = new NewProduct("product1", 30);
         Product savedProduct = new Product("123", "product1", 30);
 
+        when(idService.randomId()).thenReturn("123");
         when(productRepository.save(savedProduct)).thenReturn(savedProduct);
 
         //WHEN
@@ -67,7 +69,36 @@ class ProductServiceTest {
         //THEN
         Product expected = new Product("1", "product1", 30);
 
-        verify(productRepository).findById(savedProduct.id()).orElseThrow();
+        verify(productRepository).findById(id);
         assertEquals(expected, actual);
+    }
+    @Test
+    void updateProduct() {
+        //GIVEN
+
+        NewProduct newProduct = new NewProduct("product1", 30);
+        Product savedProduct = new Product("123", "product1", 30);
+
+        when(productRepository.save(savedProduct)).thenReturn(savedProduct);
+
+        //WHEN
+        Product actual = productService.updateProduct("123", newProduct);
+
+        //THEN
+        Product expected = new Product("123", "product1", 30);
+        verify(productRepository).save(savedProduct);
+        assertEquals(expected, actual);
+    }
+    @Test
+    void deleteProduct() {
+        //GIVEN
+        String id = "3";
+        doNothing().when(productRepository).deleteById("3");
+
+        //WHEN
+        productService.deleteProduct(id);
+
+        //THEN
+        verify(productRepository).deleteById(id);
     }
 }

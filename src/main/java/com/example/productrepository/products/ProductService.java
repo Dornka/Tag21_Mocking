@@ -12,10 +12,11 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private IdService idService;
+    private final IdService idService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, IdService idService) {
         this.productRepository = productRepository;
+        this.idService = idService;
     }
 
     public List<Product> findAllProducts() {
@@ -25,7 +26,7 @@ public class ProductService {
     public Product addProduct(NewProduct newProduct) {
 
         Product product = new Product(
-                UUID.randomUUID().toString(),
+                idService.randomId(),
                 newProduct.title(),
                 newProduct.price()
                 );
@@ -34,5 +35,13 @@ public class ProductService {
     }
     public Product findById(String id){
         return productRepository.findById(id).orElseThrow();
+    }
+    public Product updateProduct(String id, NewProduct productToUpdate) {
+        Product productToSave = new Product(id, productToUpdate.title(), productToUpdate.price());
+        return productRepository.save(productToSave);
+    }
+
+    public void deleteProduct(String id) {
+        productRepository.deleteById(id);
     }
 }

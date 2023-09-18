@@ -1,15 +1,13 @@
 package com.example.productrepository.products.models;
+import org.springframework.stereotype.Service;
+
 import java.util.Random;
+import java.util.UUID;
 
-
+@Service
 public class IdService {
-    private Random random;
 
-    public IdService() {
-        random = new Random();
-    }
-
-    public int generateRandomId() {
-        return random.nextInt();
+    public String randomId(){
+        return UUID.randomUUID().toString();
     }
 }
