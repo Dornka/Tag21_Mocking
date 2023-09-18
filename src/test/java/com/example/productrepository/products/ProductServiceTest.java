@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -49,6 +50,24 @@ class ProductServiceTest {
         //THEN
         Product expected = new Product("123", "product1", 30);
         verify(productRepository).save(savedProduct);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findById() {
+        //GIVEN
+        Product p1 = new Product("1", "product1", 30);
+        Product savedProduct = new Product("1", "product1", 30);
+
+        when(productRepository.findById(savedProduct.id())).thenReturn();
+
+        //WHEN
+        Product actual = productService.findById(p1.id());
+
+        //THEN
+        Product expected = new Product("1", "product1", 30);
+
+        verify(productRepository).findById(savedProduct.id()).orElseThrow();
         assertEquals(expected, actual);
     }
 }
